@@ -5,6 +5,7 @@ const demosSection = document.getElementById('demos');
 const enableWebcamButton = document.getElementById('webcamButton');
 
 
+
 // Check if webcam access is supported.
 function getUserMediaSupported() {
     return !!(navigator.mediaDevices &&
