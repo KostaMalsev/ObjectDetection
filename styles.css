@@ -11,7 +11,10 @@ h1 {
 
 video {
     width: 100vw;
-    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
 }
 
 section {
@@ -32,26 +35,19 @@ section {
 }
 
 .highlighter p {
-    padding: 5px;
     z-index: 2;
     font-size: 30px;
     color: white;
+    position: absolute;
+    left: inherit;
+    opacity: 0;
 }
 
 .highlighter {
-    border: 2px solid white;
-    box-shadow: 0 0 50px 0 white;
+    box-shadow: 0 0 50px 10px white;
     z-index: 1;
     position: absolute;
     display: grid;
     place-content: center;
-}
-
-.background {
-    width: 100%;
-    position: absolute;
-    z-index: -1000;
-    left: 0;
-    top: 0;
-    background: white;
+    border-radius: 5px
 }
