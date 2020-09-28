@@ -5,19 +5,12 @@ body {
 }
 
 h1 {
-    font-weight: lighter;
-    opacity: .5;
-    color: white;
+    opacity: 0;
 }
 
 video {
     width: 100vw;
     height: 100vh;
-}
-
-section {
-    opacity: 1;
-    transition: opacity 500ms ease-in-out;
 }
 
 button {
@@ -32,6 +25,7 @@ button {
     position: absolute;
     top: 20px;
     left: 20px;
+    position: fixed;
 }
 
 .removed {
