@@ -119,7 +119,8 @@ function enableCam(event) {
 
     // Stream video from VAR (for safari also)
     navigator.mediaDevices.getUserMedia({
-        video: {
+        video:{
+            /*{
             width: {
                 min: 1280,
                 ideal: 1920,
@@ -130,6 +131,7 @@ function enableCam(event) {
                 ideal: 1080,
                 max: 1440,
             },
+             */
             facingMode: "environment"
         },
     }).then(stream => {
