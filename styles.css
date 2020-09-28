@@ -51,3 +51,12 @@ section {
     z-index: 1;
     position: absolute;
 }
+
+.background {
+    width: 100%;
+    position: absolute;
+    z-index: -1000;
+    left: 0;
+    top: 0;
+    background: white;
+}
