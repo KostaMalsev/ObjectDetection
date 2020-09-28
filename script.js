@@ -24,27 +24,6 @@ if (getUserMediaSupported()) {
 
 
 
-// Enable the live webcam view and start classification.
-function enableCam(event) {
-    // Only continue if the COCO-SSD has finished loading.
-    if (!model) {
-        return;
-    }
-
-    // Hide the button once clicked.
-    event.target.classList.add('removed');
-
-    // getUsermedia parameters to force video but not audio.
-    const constraints = {
-        video: true
-    };
-
-    // Activate the webcam stream.
-    navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
-        video.srcObject = stream;
-        video.addEventListener('loadeddata', predictWebcam);
-    });
-}
 
 
 var children = [];
@@ -114,6 +93,52 @@ cocoSsd.load().then(function (loadedModel) {
 
 
 
+
+// Enable the live webcam view and start classification.
+function enableCam(event) {
+    // Only continue if the COCO-SSD has finished loading.
+    if (!model) {
+        return;
+    }
+
+    // Hide the button once clicked.
+    event.target.classList.add('removed');
+
+    // getUsermedia parameters to force video but not audio.
+    const constraints = {
+        video: true
+    };
+
+    /*
+    // Activate the webcam stream.
+    navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+        video.srcObject = stream;
+        video.addEventListener('loadeddata', predictWebcam);
+    });
+     */
+    // Stream video from VAR (for safari also)
+    navigator.mediaDevices.getUserMedia({
+        video: {
+            width: {
+                min: 1280,
+                ideal: 1920,
+                max: 2560,
+            },
+            height: {
+                min: 720,
+                ideal: 1080,
+                max: 1440,
+            },
+            facingMode: "environment"
+        },
+    }).then(stream => {
+        let $video = document.querySelector('video');
+        $video.srcObject = stream;
+        $video.onloadedmetadata = () => {
+            $video.play();
+        }
+    });
+}
 
 
 
