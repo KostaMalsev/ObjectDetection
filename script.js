@@ -43,9 +43,7 @@ function predictWebcam() {
             // If we are over 66% sure we are sure we classified it right, draw it!
             if (predictions[n].score > 0.66) {
                 const p = document.createElement('p');
-                p.innerText = predictions[n].class + ' - with '
-                    + Math.round(parseFloat(predictions[n].score) * 100)
-                    + '% confidence.';
+                p.innerText = Math.round(parseFloat(predictions[n].score) * 100) + '% ' + predictions[n].class;
                 p.style = 'margin-left: ' + predictions[n].bbox[0] + 'px; ' +
                     'margin-top: ' + (predictions[n].bbox[1] - 10) + 'px; ' +
                     'width: ' + (predictions[n].bbox[2] - 10) + 'px; ' +
@@ -85,7 +83,8 @@ var model = undefined;
 cocoSsd.load().then(function (loadedModel) {
     model = loadedModel;
     // Show demo section now model is ready to use.
-    demosSection.classList.remove('invisible');
+    enableWebcamButton.classList.remove('invisible');
+    enableWebcamButton.innerHTML = 'Start camera';
 });
 
 
@@ -105,7 +104,7 @@ function enableCam(event) {
     }
 
     // Hide the button once clicked.
-    event.target.classList.add('removed');
+    enableWebcamButton.classList.add('removed');
 
     // getUsermedia parameters to force video but not audio.
     const constraints = {

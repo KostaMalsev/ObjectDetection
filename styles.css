@@ -1,6 +1,7 @@
 body {
     font-family: sans-serif;
     margin: 0;
+    background: black;
 }
 
 h1 {
@@ -19,12 +20,31 @@ section {
     transition: opacity 500ms ease-in-out;
 }
 
+button {
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 10px 30px;
+    background-color: #0060DF;
+    border: solid 1px #0060DF;
+    color: #FFF;
+    pointer-events: all;
+    transition: .2s ease;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
 .removed {
-    display: none;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .invisible {
-    opacity: 0.2;
+    border: 1px solid #B1B1B3;
+    background: white;
+    color: #000;
+    cursor: default;
+    pointer-events: none;
 }
 
 .camView {
