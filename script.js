@@ -137,7 +137,7 @@ function enableCam(event) {
         $video.srcObject = stream;
         $video.onloadedmetadata = () => {
             $video.play();
-            video.addEventListener('loadeddata', predictWebcam);
+            $video.addEventListener('loadeddata', predictWebcam);
         }
     });
 
