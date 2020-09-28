@@ -60,9 +60,10 @@ function predictWebcam() {
                     'height: ' + predictions[n].bbox[3] + 'px;';
 
                 liveView.appendChild(highlighter); //KOSTA
-                liveView.appendChild(p);
+                //liveView.appendChild(p);
+                highlighter.appendChild(p);
                 children.push(highlighter);//KOSTA
-                children.push(p);
+                //children.push(p);
             }
         }
 
