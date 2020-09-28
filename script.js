@@ -33,7 +33,8 @@ function predictWebcam() {
     model.detect(video).then(function (predictions) {
         // Remove any highlighting we did previous frame.
         for (let i = 0; i < children.length; i++) {
-            liveView.removeChild(children[i]);
+            //liveView.removeChild(children[i]);
+            video.removeChild(children[i]);
         }
         children.splice(0);
 
@@ -46,19 +47,23 @@ function predictWebcam() {
                 p.innerText = predictions[n].class + ' - with '
                     + Math.round(parseFloat(predictions[n].score) * 100)
                     + '% confidence.';
-                p.style = 'margin-left: ' + predictions[n].bbox[0] + 'px; margin-top: '
-                    + (predictions[n].bbox[1] - 10) + 'px; width: '
-                    + (predictions[n].bbox[2] - 10) + 'px; top: 0; left: 0;';
+                p.style = 'margin-left: ' + predictions[n].bbox[0] + 'px; ' +
+                    'margin-top: ' + (predictions[n].bbox[1] - 10) + 'px; ' +
+                    'width: ' + (predictions[n].bbox[2] - 10) + 'px; ' +
+                    'top: 0; ' +
+                    'left: 0;';
                 //p.style = 'position: absolute'; //KOSTA
                 const highlighter = document.createElement('div');
                 highlighter.setAttribute('class', 'highlighter');
-                highlighter.style = 'left: ' + predictions[n].bbox[0] + 'px; top: '
-                    + predictions[n].bbox[1] + 'px; width: '
-                    + predictions[n].bbox[2] + 'px; height: '
-                    + predictions[n].bbox[3] + 'px;';
+                highlighter.style = 'left: ' + predictions[n].bbox[0] + 'px; ' +
+                    'top: ' + predictions[n].bbox[1] + 'px; ' +
+                    'width: ' + predictions[n].bbox[2] + 'px; ' +
+                    'height: ' + predictions[n].bbox[3] + 'px;';
 
-                liveView.appendChild(highlighter); //KOSTA
-                liveView.appendChild(p);
+                //liveView.appendChild(highlighter); //KOSTA
+                //liveView.appendChild(p);
+                video.appendChild((highlighter));
+                video.appendChild((p));
                 children.push(highlighter);//KOSTA
                 children.push(p);
             }
