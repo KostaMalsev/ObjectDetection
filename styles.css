@@ -36,7 +36,7 @@ section {
 }
 
 .camView p {
-    position: absolute;
+    /*position: absolute;*/
     padding: 5px;
     background-color: rgba(255, 111, 0, 0.85);
     color: #FFF;
