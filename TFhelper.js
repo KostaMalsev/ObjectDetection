@@ -270,6 +270,7 @@ async function detectTF(imgToPredict) {
         h = Math.min(imageSize, h) - y;
         w = Math.min(imageSize, w) - x;
 
+        //x,y is low left corner:
         const resultObj = {
             label: className,
             confidence: classProb,

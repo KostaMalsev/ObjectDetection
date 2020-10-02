@@ -39,16 +39,16 @@ function predictWebcam() {
             if (predictions[n].score > 0.66) {
                 const p = document.createElement('p');
                 p.innerText = Math.round(parseFloat(predictions[n].score) * 100) + '% ' + predictions[n].class;
-                p.style = 'margin-left: ' + predictions[n].x*video.videoWidth + 'px; ' +
-                    'margin-top: ' + (predictions[n].y*video.videoHeight - 10) + 'px; ' +
+                p.style = 'margin-left: ' + (1-predictions[n].x)*video.videoWidth + 'px; ' +
+                    'margin-top: ' + ((1-predictions[n].y)*video.videoHeight - 10) + 'px; ' +
                     'width: ' + (predictions[n].width*video.videoWidth - 10) + 'px; ' +
                     'top: 0; ' +
                     'left: 0;';
                 //p.style = 'position: absolute'; //KOSTA
                 const highlighter = document.createElement('div');
                 highlighter.setAttribute('class', 'highlighter');
-                highlighter.style = 'left: ' + predictions[n].x*video.videoWidth + 'px; ' +
-                    'top: ' + predictions[n].y*x*video.videoHeight + 'px; ' +
+                highlighter.style = 'left: ' + (1-predictions[n].x)*video.videoWidth + 'px; ' +
+                    'top: ' + (1-predictions[n].y)*x*video.videoHeight + 'px; ' +
                     'width: ' + predictions[n].width*video.videoWidth + 'px; ' +
                     'height: ' + predictions[n].height*video.videoHeight + 'px;';
 
