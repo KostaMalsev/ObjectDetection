@@ -29,8 +29,15 @@ async function detectTFMOBILE(imgToPredict) {
     const tf4d_2 = tf.cast(tf4d_2_, 'int32');
     //let predictions = await model.executeAsync({ image_tensor: tf4d }, ['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'])
     //let predictions = await model.executeAsync(tf4d_2,['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'] );
-    let predictions = await model.executeAsync(tf4d_2);
 
+    let predictions = await model.executeAsync(tf4d_2);//works
+/*
+    let results  = model.executeAsync(tf4d_2).then(function (result) {
+        const scores = result[0].dataSync();
+        const boxes = result[1].dataSync();
+        let stam=9;
+    });
+*/
 
 /*
     const tfImg = tf.browser.fromPixels(this.$refs.video)
