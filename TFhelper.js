@@ -1,7 +1,149 @@
 var filterBoxesThreshold=0.01;
-const imageSize = 416; //TBD @@ is fixed!! need to change
+//const imageSize = 416; //TBD @@ is fixed!! need to change
+const imageSize = 512; //TBD @@ is fixed!! need to change
 var    IOUThreshold = 0.4;
 var classProbThreshold = 0.4;
+
+
+
+
+
+
+//Loading custom pretrained cocc mobilenet_v2:
+//tensorflowjs_converter --input_format=tf_saved_model --output_node_names='detection_boxes,detection_classes,detection_features,detection_multiclass_scores,detection_scores,num_detections,raw_detection_boxes,raw_detection_scores' --saved_model_tags=serve --output_format=tfjs_graph_model /content/fine_tuned_model/saved_model /content/fine_tuned_model/web_model
+
+
+
+//Image detects object that matches the preset:
+async function detectTFMOBILE(imgToPredict) {
+    //await this.ready:
+    await tf.nextFrame();
+
+    const tfImg = tf.browser.fromPixels(imgToPredict); //512
+    const smallImg = tf.image.resizeBilinear(tfImg, [320, 320]) // 600, 450
+    const resized = tf.cast(smallImg, 'float32');
+    const tf4d = tf.tensor4d(Array.from(resized.dataSync()), [1, 320, 320, 3]); // 600, 450
+
+    const resized_2 = tf.cast(smallImg, 'int32');
+    var tf4d_2_ = tf.tensor4d(Array.from(resized_2.dataSync()), [1, 320, 320, 3]); // 600, 450
+    const tf4d_2 = tf.cast(tf4d_2_, 'int32');
+    //let predictions = await model.executeAsync({ image_tensor: tf4d }, ['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'])
+    //let predictions = await model.executeAsync(tf4d_2,['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'] );
+    let predictions = await model.executeAsync(tf4d_2);
+
+
+/*
+    const tfImg = tf.browser.fromPixels(this.$refs.video)
+    const smallImg = tf.image.resizeBilinear(tfImg, [300, 300]) // 600, 450
+    const resized = tf.cast(smallImg, 'float32')
+    const tf4d = tf.tensor4d(Array.from(resized.dataSync()), [1, 300, 300, 3]) // 600, 450
+    let predictions = await this.model.executeAsync({ image_tensor: tf4d }, ['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'])
+*/
+        //['detection_anchor_indices'] - additional output
+    renderPredictionBoxes(predictions[0].dataSync(), predictions[1].dataSync(), predictions[2].dataSync(), predictions[3].dataSync());
+
+    tfImg.dispose();
+    smallImg.dispose();
+    resized.dispose();
+    tf4d.dispose();
+
+}
+
+
+
+
+//Rednder boxes around the detections:
+function renderPredictionBoxes (predictionBoxes, totalPredictions, predictionClasses, predictionScores)
+{
+    // get the context of canvas
+    //liveView
+
+    //Remove all detections:
+    for (let i = 0; i < children.length; i++) {
+        liveView.removeChild(children[i]);
+    }
+    children.splice(0);
+
+
+    // Now lets loop through predictions and draw them to the live view if
+    // they have a high confidence score.
+    //for (let i = 0; i < totalPredictions[0]; i++) {
+    for (let i = 0; i < 99; i++) {
+
+        //If we are over 66% sure we are sure we classified it right, draw it!
+        const minY = predictionBoxes[i * 4] * 320;
+        const minX = predictionBoxes[i * 4 + 1] * 320;
+        const maxY = predictionBoxes[i * 4 + 2] * 320;
+        const maxX = predictionBoxes[i * 4 + 3] * 320;
+        const score = predictionScores[i * 3] * 100;
+
+        //If confidence is above 75%
+        if (score > 2.1){//75) {
+            const p = document.createElement('p');
+            p.innerText = Math.round(score) + '% ' + 'MNM';
+            p.style = 'margin-left: ' + (minX-10) + 'px; ' +
+                'margin-top: ' + (maxY-10) + 'px; ' +
+                'width: ' + (maxX-minX) + 'px; ' +
+                'top: 0; ' +
+                'left: 0;';
+            //p.style = 'position: absolute'; //KOSTA
+            const highlighter = document.createElement('div');
+            highlighter.setAttribute('class', 'highlighter');
+            highlighter.style = 'left: ' + minX + 'px; ' +
+                'top: ' + maxY + 'px; ' +
+                'width: ' + (maxX-minX) + 'px; ' +
+                'height: ' + (maxY-minY) + 'px;';
+
+            liveView.appendChild(highlighter);
+            highlighter.appendChild(p);
+            children.push(highlighter);
+        }
+    }
+
+
+/*
+    const ctx = this.$refs.canvas.getContext('2d')
+    // clear the canvas
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+    // draw results
+    for (let i = 0; i < totalPredictions[0]; i++) {
+        const minY = predictionBoxes[i * 4] * 450
+        const minX = predictionBoxes[i * 4 + 1] * 600
+        const maxY = predictionBoxes[i * 4 + 2] * 450
+        const maxX = predictionBoxes[i * 4 + 3] * 600
+        const score = predictionScores[i * 3] * 100
+        if (score > 75) {
+            ctx.beginPath()
+            ctx.rect(minX, minY, maxX - minX, maxY - minY)
+            ctx.lineWidth = 3
+            ctx.strokeStyle = 'red'
+            ctx.fillStyle = 'red'
+            ctx.stroke()
+            ctx.shadowColor = 'white'
+            ctx.shadowBlur = 10
+            ctx.font = '14px Arial bold'
+            ctx.fillText(
+                `${score.toFixed(1)} - Jagermeister bottle`,
+                minX,
+                minY > 10 ? minY - 5 : 10
+            )
+        }
+    }
+    */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //Used for post processing for YOLO
@@ -202,9 +344,16 @@ function imgToTensor(input, size = null) {
         if (size) {
             img = tf.image.resizeBilinear(img, size);
         }
-        const croppedImage = cropImage(img);
+        //const croppedImage = cropImage(img);
+        const croppedImage = img;//KOSTA
+        //const batchedImage = croppedImage.expandDims(0);
         const batchedImage = croppedImage.expandDims(0);
-        return batchedImage.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
+        //return batchedImage.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
+        //return batchedImage.div(tf.scalar(127)).sub(tf.scalar(1));
+        //tf.dtypes.cast(x, tf.int32)
+        //return (tf.cast(batchedImage.div(tf.scalar(127)).sub(tf.scalar(1)),'int32')); //KOSTA_CHANGE
+        //return batchedImage.to_int32().div(tf.scalar(127)).sub(tf.scalar(1)); //KOSTA_CHANGE
+        return (tf.cast(batchedImage.div(tf.scalar(127)).sub(tf.scalar(1)),'int32')); //KOSTA_CHANGE
     });
 }
 
@@ -220,15 +369,27 @@ async function detectTF(imgToPredict) {
     //await this.ready; ??
     await tf.nextFrame();
 
+    /*
     //this.isPredicting = true; ??
-
-    const [allBoxes, boxConfidence, boxClassProbs] = tf.tidy(() => {
-        const input = imgToTensor(imgToPredict, [imageSize, imageSize]);
-        const activation = model.predict(input);
+    const [allBoxes, boxConfidence, boxClassProbs] = tf.tidy(async () => {
+        //const input = imgToTensor(imgToPredict, [imageSize, imageSize]);
+        const input = imgToTensor(imgToPredict, [512, 512]);
+        const activation = await model.executeAsync(input);//model.predict(input);//model.predict(input);
         const [boxXY, boxWH, bConfidence, bClassProbs] = head(activation, ANCHORS, 80);
         const aBoxes = boxesToCorners(boxXY, boxWH);
         return [aBoxes, bConfidence, bClassProbs];
     });
+     */
+
+    //const input = imgToTensor(imgToPredict, [imageSize, imageSize]);
+    //const input = imgToTensor(imgToPredict, [512, 512]);
+    const input = imgToTensor(imgToPredict, [1200, 1600]);
+    const activation = await model.executeAsync(input);//model.predict(input);//model.predict(input);
+    //const activation =  model.predict(input);
+    const [boxXY, boxWH, boxConfidence, boxClassProbs] = head(activation, ANCHORS, 80);
+    const allBoxes = boxesToCorners(boxXY, boxWH);
+    tf.tidy();
+
 
     const [boxes, scores, classes] = await filterBoxes(allBoxes, boxConfidence, boxClassProbs, filterBoxesThreshold);
 
@@ -294,8 +455,11 @@ async function asyncLoadModel(model_url) {
 
     //let modelUrl = `${model_url}/model.json`;
     //model - defined in scirpt.js
-    model = await tf.loadLayersModel(model_url);
+    //model = await tf.loadLayersModel(model_url);
+    model = await tf.loadGraphModel(model_url);
     console.log('Model loaded');
+    //tf.env().set('WEBGPU_CPU_FORWARD', false);//KOSTA: work around slice issue in models.
+    //tf.env().set('WEBGL_CPU_FORWARD', false);
     //defined in script.js:
     enableWebcamButton.classList.remove('invisible');
     enableWebcamButton.innerHTML = 'Start camera';
@@ -306,7 +470,12 @@ async function asyncLoadModel(model_url) {
 function tensorLoadModel()
 {
     //model_name_url = "https://hub.tensorflow.google.cn/tensorflow/ssd_mobilenet_v2/2";
-    let model_name_url = "https://raw.githubusercontent.com/ml5js/ml5-data-and-training/master/models/YOLO/model.json";
+    //let model_name_url = "https://raw.githubusercontent.com/ml5js/ml5-data-and-training/master/models/YOLO/model.json";
+    //https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model.json
+    //let model_name_url = "https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model.json";
+    //let model_name_url = "https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model/model.json";
+    //let model_name_url = "https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model/mobile_netv2/webmodel/model.json";
+    let model_name_url = "https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model/mobile_netv2/webmodel2/model.json";
     asyncLoadModel(model_name_url);
 }
 

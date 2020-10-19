@@ -2,8 +2,8 @@ const video = document.getElementById('webcam');
 const liveView = document.getElementById('liveView');
 const demosSection = document.getElementById('demos');
 const enableWebcamButton = document.getElementById('webcamButton');
-//const type_of_model='YOLO';
-const type_of_model='COCO';
+const type_of_model='YOLO';
+//const type_of_model='COCO';
 
 
 // Check if webcam access is supported.
@@ -69,39 +69,7 @@ function predictWebcam() {
 //Perform prediction based on webcam using coco model:
 function predictWebcamTF() {
     // Now let's start classifying a frame in the stream.
-    detectTF(video).then(function (predictions) {
-        // Remove any highlighting we did previous frame.
-        for (let i = 0; i < children.length; i++) {
-            liveView.removeChild(children[i]);
-        }
-        children.splice(0);
-
-        // Now lets loop through predictions and draw them to the live view if
-        // they have a high confidence score.
-        for (let n = 0; n < predictions.length; n++) {
-            // If we are over 66% sure we are sure we classified it right, draw it!
-            //if (predictions[n].score > 0.66) {
-                const p = document.createElement('p');
-                p.innerText = Math.round(parseFloat(predictions[n].confidence) * 100) + '% ' + predictions[n].label;
-                p.style = 'margin-left: ' + predictions[n].x*video.videoWidth + 'px; ' +
-                    'margin-top: ' + (predictions[n].y*video.videoHeight - 10) + 'px; ' +
-                    'width: ' + (predictions[n].width*video.videoWidth - 10) + 'px; ' +
-                    'top: 0; ' +
-                    'left: 0;';
-                //p.style = 'position: absolute'; //KOSTA
-                const highlighter = document.createElement('div');
-                highlighter.setAttribute('class', 'highlighter');
-                highlighter.style = 'left: ' + predictions[n].x*video.videoWidth + 'px; ' +
-                    'top: ' + predictions[n].y*video.videoHeight + 'px; ' +
-                    'width: ' + predictions[n].width*video.videoWidth + 'px; ' +
-                    'height: ' + predictions[n].height*video.videoHeight + 'px;';
-
-                liveView.appendChild(highlighter);
-                highlighter.appendChild(p);
-                children.push(highlighter);
-
-            //}
-        }
+    detectTFMOBILE(video).then(function () {
 
         // Call this function again to keep predicting when the browser is ready.
         window.requestAnimationFrame(predictWebcamTF);
