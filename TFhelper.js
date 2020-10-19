@@ -475,7 +475,8 @@ function tensorLoadModel()
     //let model_name_url = "https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model.json";
     //let model_name_url = "https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model/model.json";
     //let model_name_url = "https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model/mobile_netv2/webmodel/model.json";
-    let model_name_url = "https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model/mobile_netv2/webmodel2/model.json";
+    let model_name_url = "https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/model/master/mobile_netv2/webmodel2/model.json";
+    https://github.com/KostaMalsev/ImageRecognition/tree/master/model/mobile_netv2/web_model2
     asyncLoadModel(model_name_url);
 }
 
