@@ -86,7 +86,7 @@ function renderPredictionBoxes (predictionBoxes, totalPredictions, predictionCla
         const score = predictionScores[i * 3] * 100;
 
         //If confidence is above 75%
-        if (score > 95){//75) {
+        if (score > 75 && score < 95){//75) {
             const p = document.createElement('p');
             p.innerText = Math.round(score) + '% ' + 'MNM';
             p.style = 'margin-left: ' + (minX-10) + 'px; ' +
