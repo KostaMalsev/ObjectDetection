@@ -20,12 +20,12 @@ async function detectTFMOBILE(imgToPredict) {
     await tf.nextFrame();
 
     const tfImg = tf.browser.fromPixels(imgToPredict); //512
-    const smallImg = tf.image.resizeBilinear(tfImg, [320, 320]) // 600, 450
+    const smallImg = tf.image.resizeBilinear(tfImg, [512, 512]) // 600, 450 [320, 320]
     const resized = tf.cast(smallImg, 'float32');
-    const tf4d = tf.tensor4d(Array.from(resized.dataSync()), [1, 320, 320, 3]); // 600, 450
+    const tf4d = tf.tensor4d(Array.from(resized.dataSync()), [1, 512, 512, 3]); // 600, 450
 
     const resized_2 = tf.cast(smallImg, 'int32');
-    var tf4d_2_ = tf.tensor4d(Array.from(resized_2.dataSync()), [1, 320, 320, 3]); // 600, 450
+    var tf4d_2_ = tf.tensor4d(Array.from(resized_2.dataSync()), [1, 512, 512, 3]); // 600, 450
     const tf4d_2 = tf.cast(tf4d_2_, 'int32');
     //let predictions = await model.executeAsync({ image_tensor: tf4d }, ['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'])
     //let predictions = await model.executeAsync(tf4d_2,['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'] );
@@ -48,7 +48,8 @@ async function detectTFMOBILE(imgToPredict) {
     let predictions = await this.model.executeAsync({ image_tensor: tf4d }, ['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'])
 */
         //['detection_anchor_indices'] - additional output
-    renderPredictionBoxes(predictions[0].dataSync(), predictions[1].dataSync(), predictions[2].dataSync(), predictions[3].dataSync());
+    //renderPredictionBoxes(predictions[0].dataSync(), predictions[1].dataSync(), predictions[2].dataSync(), predictions[3].dataSync());
+    renderPredictionBoxes(predictions[0].dataSync(), predictions[1].dataSync(), predictions[2].dataSync());
 
     tfImg.dispose();
     smallImg.dispose();
@@ -61,7 +62,8 @@ async function detectTFMOBILE(imgToPredict) {
 
 
 //Rednder boxes around the detections:
-function renderPredictionBoxes (predictionBoxes, totalPredictions, predictionClasses, predictionScores)
+//function renderPredictionBoxes (predictionBoxes, totalPredictions, predictionClasses, predictionScores)
+function renderPredictionBoxes (predictionBoxes, predictionClasses, predictionScores)
 {
     // get the context of canvas
     //liveView
@@ -86,7 +88,7 @@ function renderPredictionBoxes (predictionBoxes, totalPredictions, predictionCla
         const score = predictionScores[i * 3] * 100;
 
         //If confidence is above 75%
-        if (score > 75 && score < 95){//75) {
+        if (score > 75 && score < 100){//75) {
             const p = document.createElement('p');
             p.innerText = Math.round(score) + '% ' + 'MNM';
             p.style = 'margin-left: ' + (minX-10) + 'px; ' +
