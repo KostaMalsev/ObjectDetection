@@ -31,6 +31,7 @@ async function detectTFMOBILE(imgToPredict) {
     //let predictions = await model.executeAsync(tf4d_2,['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'] );
 
     let predictions = await model.executeAsync(tf4d_2);//works
+    let stam=1;
 /*
     let results  = model.executeAsync(tf4d_2).then(function (result) {
         const scores = result[0].dataSync();
@@ -78,14 +79,14 @@ function renderPredictionBoxes (predictionBoxes, totalPredictions, predictionCla
     for (let i = 0; i < 99; i++) {
 
         //If we are over 66% sure we are sure we classified it right, draw it!
-        const minY = predictionBoxes[i * 4] * 320;
-        const minX = predictionBoxes[i * 4 + 1] * 320;
-        const maxY = predictionBoxes[i * 4 + 2] * 320;
-        const maxX = predictionBoxes[i * 4 + 3] * 320;
+        const minY = predictionBoxes[i * 4] * 1200;
+        const minX = predictionBoxes[i * 4 + 1] * 1600;
+        const maxY = predictionBoxes[i * 4 + 2] * 1200;
+        const maxX = predictionBoxes[i * 4 + 3] * 1600;
         const score = predictionScores[i * 3] * 100;
 
         //If confidence is above 75%
-        if (score > 2.1){//75) {
+        if (score > 15){//75) {
             const p = document.createElement('p');
             p.innerText = Math.round(score) + '% ' + 'MNM';
             p.style = 'margin-left: ' + (minX-10) + 'px; ' +
