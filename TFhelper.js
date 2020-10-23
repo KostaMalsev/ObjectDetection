@@ -34,8 +34,50 @@ async function detectTFMOBILE(imgToPredict) {
     //'detection_boxes,detection_classes,detection_features,detection_multiclass_scores,detection_scores,
     // num_detections,raw_detection_boxes,raw_detection_scores'
     let predictions = await model.executeAsync(tf4d_2);//works
+    //let predictions = await model.executeAsync(tf4d_2,['detection_anchor_indices', 'detection_boxes', 'detection_scores']);//works
     let stam=1;
-/*
+    //boxes,classes, scores]
+    renderPredictionBoxes(predictions[4].dataSync(), predictions[1].dataSync(), predictions[2].dataSync());
+    //Output:
+    //[0]detection_anchor_indices [1,100]
+    //[1]detection_boxes [1,100,4]
+    /*
+    outputs['detection_anchor_indices'] tensor_info:
+      dtype: DT_FLOAT
+      shape: (1, 100)
+      name: StatefulPartitionedCall:0
+  outputs['detection_boxes'] tensor_info:
+      dtype: DT_FLOAT
+      shape: (1, 100, 4)
+      name: StatefulPartitionedCall:1
+  outputs['detection_classes'] tensor_info:
+      dtype: DT_FLOAT
+      shape: (1, 100)
+      name: StatefulPartitionedCall:2
+  outputs['detection_multiclass_scores'] tensor_info:
+      dtype: DT_FLOAT
+      shape: (1, 100, 2)
+      name: StatefulPartitionedCall:3
+  outputs['detection_scores'] tensor_info:
+      dtype: DT_FLOAT
+      shape: (1, 100)
+      name: StatefulPartitionedCall:4
+  outputs['num_detections'] tensor_info:
+      dtype: DT_FLOAT
+      shape: (1)
+      name: StatefulPartitionedCall:5
+  outputs['raw_detection_boxes'] tensor_info:
+      dtype: DT_FLOAT
+      shape: (1, 1917, 4)
+      name: StatefulPartitionedCall:6
+  outputs['raw_detection_scores'] tensor_info:
+      dtype: DT_FLOAT
+      shape: (1, 1917, 2)
+      name: StatefulPartitionedCall:7
+     */
+
+
+    /*
     let results  = model.executeAsync(tf4d_2).then(function (result) {
         const scores = result[0].dataSync();
         const boxes = result[1].dataSync();
@@ -52,7 +94,8 @@ async function detectTFMOBILE(imgToPredict) {
 */
         //['detection_anchor_indices'] - additional output
     //renderPredictionBoxes(predictions[0].dataSync(), predictions[1].dataSync(), predictions[2].dataSync(), predictions[3].dataSync());
-    renderPredictionBoxes(predictions[0].dataSync(), predictions[1].dataSync(), predictions[2].dataSync());
+    //renderPredictionBoxes(predictions[0].dataSync(), predictions[1].dataSync(), predictions[2].dataSync());
+
 
     tfImg.dispose();
     smallImg.dispose();
@@ -84,14 +127,14 @@ function renderPredictionBoxes (predictionBoxes, predictionClasses, predictionSc
     for (let i = 0; i < 99; i++) {
 
         //If we are over 66% sure we are sure we classified it right, draw it!
-        const minY = predictionBoxes[i * 4] * 610*100;
-        const minX = predictionBoxes[i * 4 + 1] * 730*100;
-        const maxY = predictionBoxes[i * 4 + 2] * 610*100;
-        const maxX = predictionBoxes[i * 4 + 3] * 730*100;
+        const minY = predictionBoxes[i * 4] * 730*100;
+        const minX = predictionBoxes[i * 4 + 1] * 610*100;
+        const maxY = predictionBoxes[i * 4 + 2] * 730*100;
+        const maxX = predictionBoxes[i * 4 + 3] * 610*100;
         const score = predictionScores[i * 3] * 100;
 
         //If confidence is above 75%
-        if (score > 75 && score < 100){//75) {
+        if (score > 90 && score < 100){//75) {
             const p = document.createElement('p');
             p.innerText = Math.round(score) + '% ' + 'MNM';
             p.style = 'margin-left: ' + (minX-10) + 'px; ' +
