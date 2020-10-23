@@ -20,16 +20,19 @@ async function detectTFMOBILE(imgToPredict) {
     await tf.nextFrame();
 
     const tfImg = tf.browser.fromPixels(imgToPredict); //512
-    const smallImg = tf.image.resizeBilinear(tfImg, [512, 512]) // 600, 450 [320, 320]
+    const smallImg = tf.image.resizeBilinear(tfImg, [224, 224]) // 600, 450 [320, 320]
     const resized = tf.cast(smallImg, 'float32');
-    const tf4d = tf.tensor4d(Array.from(resized.dataSync()), [1, 512, 512, 3]); // 600, 450
+    const tf4d = tf.tensor4d(Array.from(resized.dataSync()), [1, 224, 224, 3]); // 600, 450
 
     const resized_2 = tf.cast(smallImg, 'int32');
-    var tf4d_2_ = tf.tensor4d(Array.from(resized_2.dataSync()), [1, 512, 512, 3]); // 600, 450
+    //var tf4d_2_ = tf.tensor4d(Array.from(resized_2.dataSync()), [1, 512, 512, 3]); // 600, 450
+    var tf4d_2_ = tf.tensor4d(Array.from(resized_2.dataSync()), [1, 224, 224, 3]); // 600, 450
     const tf4d_2 = tf.cast(tf4d_2_, 'int32');
     //let predictions = await model.executeAsync({ image_tensor: tf4d }, ['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'])
     //let predictions = await model.executeAsync(tf4d_2,['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'] );
 
+    //'detection_boxes,detection_classes,detection_features,detection_multiclass_scores,detection_scores,
+    // num_detections,raw_detection_boxes,raw_detection_scores'
     let predictions = await model.executeAsync(tf4d_2);//works
     let stam=1;
 /*
@@ -393,7 +396,7 @@ async function detectTF(imgToPredict) {
 
     //const input = imgToTensor(imgToPredict, [imageSize, imageSize]);
     //const input = imgToTensor(imgToPredict, [512, 512]);
-    const input = imgToTensor(imgToPredict, [1200, 1600]);
+    const input = imgToTensor(imgToPredict, [224,224]);//[1200, 1600]);
     const activation = await model.executeAsync(input);//model.predict(input);//model.predict(input);
     //const activation =  model.predict(input);
     const [boxXY, boxWH, boxConfidence, boxClassProbs] = head(activation, ANCHORS, 80);
@@ -466,7 +469,9 @@ async function asyncLoadModel(model_url) {
     //let modelUrl = `${model_url}/model.json`;
     //model - defined in scirpt.js
     //model = await tf.loadLayersModel(model_url);
-    model = await tf.loadGraphModel(model_url);
+    model = await tf.loadGraphModel(model_url); //kind of works in 22/10/20
+    //model = await tf.loadLayersModel(model_url);//based on https://github.com/tensorflow/tfjs/blob/master/tfjs-converter/README.md#4472
+
     console.log('Model loaded');
     //tf.env().set('WEBGPU_CPU_FORWARD', false);//KOSTA: work around slice issue in models.
     //tf.env().set('WEBGL_CPU_FORWARD', false);
