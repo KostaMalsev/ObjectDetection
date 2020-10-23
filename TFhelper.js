@@ -20,7 +20,7 @@ async function detectTFMOBILE(imgToPredict) {
     await tf.nextFrame();
 
     const tfImg = tf.browser.fromPixels(imgToPredict); //512
-    const smallImg = tf.image.resizeBilinear(tfImg, [730, 610, 3]) // 600, 450 [320, 320]
+    const smallImg = tf.image.resizeBilinear(tfImg, [730, 610]) // 600, 450 [320, 320]
     const resized = tf.cast(smallImg, 'float32');
     const tf4d = tf.tensor4d(Array.from(resized.dataSync()), [1, 730, 610, 3]); // 600, 450
 
