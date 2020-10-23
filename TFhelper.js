@@ -20,13 +20,13 @@ async function detectTFMOBILE(imgToPredict) {
     await tf.nextFrame();
 
     const tfImg = tf.browser.fromPixels(imgToPredict); //512
-    const smallImg = tf.image.resizeBilinear(tfImg, [224, 224]) // 600, 450 [320, 320]
+    const smallImg = tf.image.resizeBilinear(tfImg, [730, 610, 3]) // 600, 450 [320, 320]
     const resized = tf.cast(smallImg, 'float32');
-    const tf4d = tf.tensor4d(Array.from(resized.dataSync()), [1, 224, 224, 3]); // 600, 450
+    const tf4d = tf.tensor4d(Array.from(resized.dataSync()), [1, 730, 610, 3]); // 600, 450
 
     const resized_2 = tf.cast(smallImg, 'int32');
     //var tf4d_2_ = tf.tensor4d(Array.from(resized_2.dataSync()), [1, 512, 512, 3]); // 600, 450
-    var tf4d_2_ = tf.tensor4d(Array.from(resized_2.dataSync()), [1, 224, 224, 3]); // 600, 450
+    var tf4d_2_ = tf.tensor4d(Array.from(resized_2.dataSync()), [1, 730, 610, 3]); // 600, 450
     const tf4d_2 = tf.cast(tf4d_2_, 'int32');
     //let predictions = await model.executeAsync({ image_tensor: tf4d }, ['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'])
     //let predictions = await model.executeAsync(tf4d_2,['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'] );
@@ -84,10 +84,10 @@ function renderPredictionBoxes (predictionBoxes, predictionClasses, predictionSc
     for (let i = 0; i < 99; i++) {
 
         //If we are over 66% sure we are sure we classified it right, draw it!
-        const minY = predictionBoxes[i * 4] * 1600*100;
-        const minX = predictionBoxes[i * 4 + 1] * 1200*100;
-        const maxY = predictionBoxes[i * 4 + 2] * 1600*100;
-        const maxX = predictionBoxes[i * 4 + 3] * 1200*100;
+        const minY = predictionBoxes[i * 4] * 610*100;
+        const minX = predictionBoxes[i * 4 + 1] * 730*100;
+        const maxY = predictionBoxes[i * 4 + 2] * 610*100;
+        const maxX = predictionBoxes[i * 4 + 3] * 730*100;
         const score = predictionScores[i * 3] * 100;
 
         //If confidence is above 75%
