@@ -127,10 +127,10 @@ function renderPredictionBoxes (predictionBoxes, predictionClasses, predictionSc
     for (let i = 0; i < 99; i++) {
 
         //If we are over 66% sure we are sure we classified it right, draw it!
-        const minY = (predictionBoxes[i * 4] * 730).toFixed(0); //730, 610
-        const minX = (predictionBoxes[i * 4 + 1] * 610).toFixed(0);
-        const maxY = (predictionBoxes[i * 4 + 2] * 730).toFixed(0);
-        const maxX = (predictionBoxes[i * 4 + 3] * 610).toFixed(0);
+        const minY = (predictionBoxes[i * 4] * 512).toFixed(0); //730, 610
+        const minX = (predictionBoxes[i * 4 + 1] * 512).toFixed(0);
+        const maxY = (predictionBoxes[i * 4 + 2] * 512).toFixed(0);
+        const maxX = (predictionBoxes[i * 4 + 3] * 512).toFixed(0);
         const score = predictionScores[i * 3] * 100;
 
         //If confidence is above 75%
