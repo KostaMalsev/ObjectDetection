@@ -5,6 +5,14 @@ const enableWebcamButton = document.getElementById('webcamButton');
 const type_of_model='YOLO';
 //const type_of_model='COCO';
 
+const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+
+var vidWidth = 0;
+var vidHeight = 0;
+
+var xStart = 0;
+var yStart = 0;
 
 // Check if webcam access is supported.
 function getUserMediaSupported() {
@@ -125,6 +133,13 @@ function enableCam(event) {
         let $video = document.querySelector('video');
         $video.srcObject = stream;
         $video.onloadedmetadata = () => {
+            vidWidth = $video.videoHeight;
+            vidHeight = $video.videoWidth;
+
+            //The start position of the video (from top left corner of the viewport)
+            xStart = Math.floor((vw - vidWidth) / 2);
+            yStart = (Math.floor((vh - vidHeight) / 2)>=0) ? (Math.floor((vh - vidHeight) / 2)):0;
+
             $video.play();
             if(type_of_model=='YOLO')
             {

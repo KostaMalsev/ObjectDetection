@@ -19,14 +19,23 @@ async function detectTFMOBILE(imgToPredict) {
     //await this.ready:
     await tf.nextFrame();
 
+    //Size of the video:
+    //vidWidth ;
+    //vidHeight ;
+
+    //Up-Left corner position of the video:
+    //xStart ;
+    //yStart ;
+
+
     const tfImg = tf.browser.fromPixels(imgToPredict); //512
-    const smallImg = tf.image.resizeBilinear(tfImg, [730, 610]); // 600, 450 [320, 320]
+    const smallImg = tf.image.resizeBilinear(tfImg, [vidHeight, vidWidth]); //y:1200 x:1600 (trained image size) 600, 450 [320, 320]
     const resized = tf.cast(smallImg, 'float32');
-    const tf4d = tf.tensor4d(Array.from(resized.dataSync()), [1, 730, 610, 3]); //730,610 600, 450
+    const tf4d = tf.tensor4d(Array.from(resized.dataSync()), [1, vidHeight, vidWidth, 3]); //730,610 600, 450
 
     const resized_2 = tf.cast(smallImg, 'int32');
     //var tf4d_2_ = tf.tensor4d(Array.from(resized_2.dataSync()), [1, 512, 512, 3]); // 600, 450
-    var tf4d_2_ = tf.tensor4d(Array.from(resized_2.dataSync()), [1, 730, 610, 3]); // 600, 450
+    var tf4d_2_ = tf.tensor4d(Array.from(resized_2.dataSync()), [1, vidHeight, vidWidth, 3]); // 600, 450
     const tf4d_2 = tf.cast(tf4d_2_, 'int32');
     //let predictions = await model.executeAsync({ image_tensor: tf4d }, ['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'])
     //let predictions = await model.executeAsync(tf4d_2,['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'] );
@@ -77,24 +86,6 @@ async function detectTFMOBILE(imgToPredict) {
      */
 
 
-    /*
-    let results  = model.executeAsync(tf4d_2).then(function (result) {
-        const scores = result[0].dataSync();
-        const boxes = result[1].dataSync();
-        let stam=9;
-    });
-*/
-
-/*
-    const tfImg = tf.browser.fromPixels(this.$refs.video)
-    const smallImg = tf.image.resizeBilinear(tfImg, [300, 300]) // 600, 450
-    const resized = tf.cast(smallImg, 'float32')
-    const tf4d = tf.tensor4d(Array.from(resized.dataSync()), [1, 300, 300, 3]) // 600, 450
-    let predictions = await this.model.executeAsync({ image_tensor: tf4d }, ['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'])
-*/
-        //['detection_anchor_indices'] - additional output
-    //renderPredictionBoxes(predictions[0].dataSync(), predictions[1].dataSync(), predictions[2].dataSync(), predictions[3].dataSync());
-    //renderPredictionBoxes(predictions[0].dataSync(), predictions[1].dataSync(), predictions[2].dataSync());
 
 
     tfImg.dispose();
@@ -104,15 +95,20 @@ async function detectTFMOBILE(imgToPredict) {
 
 }
 
-
-
-
 //Rednder boxes around the detections:
 //function renderPredictionBoxes (predictionBoxes, totalPredictions, predictionClasses, predictionScores)
 function renderPredictionBoxes (predictionBoxes, predictionClasses, predictionScores)
 {
     // get the context of canvas
     //liveView
+
+    //Size of the video:
+    //vidWidth ;
+    //vidHeight ;
+
+    //Up-Left corner position of the video:
+    //xStart ;
+    //yStart ;
 
     //Remove all detections:
     for (let i = 0; i < children.length; i++) {
@@ -127,18 +123,18 @@ function renderPredictionBoxes (predictionBoxes, predictionClasses, predictionSc
     for (let i = 0; i < 99; i++) {
 
         //If we are over 66% sure we are sure we classified it right, draw it!
-        const minY = (predictionBoxes[i * 4] * 730).toFixed(0); //730, 610
-        const minX = (predictionBoxes[i * 4 + 1] * 610).toFixed(0);
-        const maxY = (predictionBoxes[i * 4 + 2] * 730).toFixed(0);
-        const maxX = (predictionBoxes[i * 4 + 3] * 610).toFixed(0);
+        const minY = (predictionBoxes[i * 4] * vidHeight).toFixed(0); //730, 610
+        const minX = (predictionBoxes[i * 4 + 1] * vidWidth).toFixed(0);
+        const maxY = (predictionBoxes[i * 4 + 2] * vidHeight).toFixed(0);
+        const maxX = (predictionBoxes[i * 4 + 3] * vidWidth).toFixed(0);
         const score = predictionScores[i * 3] * 100;
 
         //If confidence is above 75%
         if (score > 70 && score < 100){//75) {
             const p = document.createElement('p');
             p.innerText = Math.round(score) + '% ' + 'MNM';
-            p.style = 'left: ' + (minX) + 'px; ' +
-                'top: ' + (minY) + 'px; ' +
+            p.style = 'left: ' + (xStart+minX) + 'px; ' +
+                'top: ' + (yStart+minY) + 'px; ' +
                 'width: ' + (maxX-minX) + 'px; ';
             p.style = 'position: absolute'; //KOSTA
             const highlighter = document.createElement('div');
@@ -157,47 +153,7 @@ function renderPredictionBoxes (predictionBoxes, predictionClasses, predictionSc
     }
 
 
-/*
-    const ctx = this.$refs.canvas.getContext('2d')
-    // clear the canvas
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-    // draw results
-    for (let i = 0; i < totalPredictions[0]; i++) {
-        const minY = predictionBoxes[i * 4] * 450
-        const minX = predictionBoxes[i * 4 + 1] * 600
-        const maxY = predictionBoxes[i * 4 + 2] * 450
-        const maxX = predictionBoxes[i * 4 + 3] * 600
-        const score = predictionScores[i * 3] * 100
-        if (score > 75) {
-            ctx.beginPath()
-            ctx.rect(minX, minY, maxX - minX, maxY - minY)
-            ctx.lineWidth = 3
-            ctx.strokeStyle = 'red'
-            ctx.fillStyle = 'red'
-            ctx.stroke()
-            ctx.shadowColor = 'white'
-            ctx.shadowBlur = 10
-            ctx.font = '14px Arial bold'
-            ctx.fillText(
-                `${score.toFixed(1)} - Jagermeister bottle`,
-                minX,
-                minY > 10 ? minY - 5 : 10
-            )
-        }
-    }
-    */
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -606,6 +562,18 @@ function getModelPath(absoluteOrRelativeUrl) {
 }
 */
 
+//-----------------OLD:
+/*
+    const tfImg = tf.browser.fromPixels(this.$refs.video)
+    const smallImg = tf.image.resizeBilinear(tfImg, [300, 300]) // 600, 450
+    const resized = tf.cast(smallImg, 'float32')
+    const tf4d = tf.tensor4d(Array.from(resized.dataSync()), [1, 300, 300, 3]) // 600, 450
+    let predictions = await this.model.executeAsync({ image_tensor: tf4d }, ['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'])
+*/
+//['detection_anchor_indices'] - additional output
+//renderPredictionBoxes(predictions[0].dataSync(), predictions[1].dataSync(), predictions[2].dataSync(), predictions[3].dataSync());
+//renderPredictionBoxes(predictions[0].dataSync(), predictions[1].dataSync(), predictions[2].dataSync());
+
 
 //From ml5 loader:--------------------------------------------------
 
@@ -625,4 +593,38 @@ if(modelLoader.isAbsoluteURL(this.modelUrl) === true){
 
 this.modelReady = true;
 return this;
- */
+
+
+/*
+    const ctx = this.$refs.canvas.getContext('2d')
+    // clear the canvas
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+    // draw results
+    for (let i = 0; i < totalPredictions[0]; i++) {
+        const minY = predictionBoxes[i * 4] * 450
+        const minX = predictionBoxes[i * 4 + 1] * 600
+        const maxY = predictionBoxes[i * 4 + 2] * 450
+        const maxX = predictionBoxes[i * 4 + 3] * 600
+        const score = predictionScores[i * 3] * 100
+        if (score > 75) {
+            ctx.beginPath()
+            ctx.rect(minX, minY, maxX - minX, maxY - minY)
+            ctx.lineWidth = 3
+            ctx.strokeStyle = 'red'
+            ctx.fillStyle = 'red'
+            ctx.stroke()
+            ctx.shadowColor = 'white'
+            ctx.shadowBlur = 10
+            ctx.font = '14px Arial bold'
+            ctx.fillText(
+                `${score.toFixed(1)} - Jagermeister bottle`,
+                minX,
+                minY > 10 ? minY - 5 : 10
+            )
+        }
+    }
+    */
+
+
+
+
