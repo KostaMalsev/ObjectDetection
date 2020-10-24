@@ -29,13 +29,13 @@ async function detectTFMOBILE(imgToPredict) {
 
 
     const tfImg = tf.browser.fromPixels(imgToPredict); //512
-    const smallImg = tf.image.resizeBilinear(tfImg, [vidHeight, vidWidth]); //y:1200 x:1600 (trained image size) 600, 450 [320, 320]
+    const smallImg = tf.image.resizeBilinear(tfImg, [vidHeight,vidWidth]); //y:1200 x:1600 (trained image size) 600, 450 [320, 320]
     const resized = tf.cast(smallImg, 'float32');
     const tf4d = tf.tensor4d(Array.from(resized.dataSync()), [1, vidHeight, vidWidth, 3]); //730,610 600, 450
 
     const resized_2 = tf.cast(smallImg, 'int32');
     //var tf4d_2_ = tf.tensor4d(Array.from(resized_2.dataSync()), [1, 512, 512, 3]); // 600, 450
-    var tf4d_2_ = tf.tensor4d(Array.from(resized_2.dataSync()), [1, vidHeight, vidWidth, 3]); // 600, 450
+    var tf4d_2_ = tf.tensor4d(Array.from(resized_2.dataSync()), [1,vidHeight, vidWidth, 3]); // 600, 450
     const tf4d_2 = tf.cast(tf4d_2_, 'int32');
     //let predictions = await model.executeAsync({ image_tensor: tf4d }, ['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'])
     //let predictions = await model.executeAsync(tf4d_2,['detection_boxes', 'num_detections', 'detection_classes', 'detection_scores'] );
@@ -123,32 +123,36 @@ function renderPredictionBoxes (predictionBoxes, predictionClasses, predictionSc
     for (let i = 0; i < 99; i++) {
 
         //If we are over 66% sure we are sure we classified it right, draw it!
-        const minY = (predictionBoxes[i * 4] * vidHeight).toFixed(0); //730, 610
-        const minX = (predictionBoxes[i * 4 + 1] * vidWidth).toFixed(0);
-        const maxY = (predictionBoxes[i * 4 + 2] * vidHeight).toFixed(0);
-        const maxX = (predictionBoxes[i * 4 + 3] * vidWidth).toFixed(0);
+        const minY = (predictionBoxes[i * 4] * vidHeight+yStart).toFixed(0); //730, 610
+        const minX = (predictionBoxes[i * 4 + 1] * vidWidth+xStart).toFixed(0);
+        const maxY = (predictionBoxes[i * 4 + 2] * vidHeight+yStart).toFixed(0);
+        const maxX = (predictionBoxes[i * 4 + 3] * vidWidth+xStart).toFixed(0);
         const score = predictionScores[i * 3] * 100;
+
+        const width_ = (maxX-minX).toFixed(0);
+        const height_ = (maxY-minY).toFixed(0);
 
         //If confidence is above 75%
         if (score > 70 && score < 100){//75) {
-            const p = document.createElement('p');
+            /*const p = document.createElement('p');
             p.innerText = Math.round(score) + '% ' + 'MNM';
-            p.style = 'left: ' + (xStart+minX) + 'px; ' +
-                'top: ' + (yStart+minY) + 'px; ' +
-                'width: ' + (maxX-minX) + 'px; ';
-            p.style = 'position: absolute'; //KOSTA
+            p.style = 'left: ' + minX + 'px; ' +
+                'top: ' + minY + 'px; ';
+             //   'width: ' + '15' + 'px; ';
+            p.style = 'position: absolute'; //KOSTA*/
             const highlighter = document.createElement('div');
             highlighter.setAttribute('class', 'highlighter');
             highlighter.style = 'left: ' + minX + 'px; ' +
                 'top: ' + minY + 'px; ' +
-                'width: ' + (maxX-minX) + 'px; ' +
-                'height: ' + (maxY-minY) + 'px;';
+                'width: ' + width_ + 'px; ' +
+                'height: ' + height_ + 'px;';
+            highlighter.innerHTML = '<p>'+Math.round(score) + '% ' + 'MNM'+'</p>';
 
             liveView.appendChild(highlighter);
-            highlighter.appendChild(p);
+            //highlighter.appendChild(p);
             children.push(highlighter);
-            children.push(p);
-            liveView.appendChild(p);
+            //children.push(p);
+            //liveView.appendChild(p);
         }
     }
 

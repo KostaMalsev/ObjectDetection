@@ -50,6 +50,7 @@ button {
     z-index: 2;
     font-size: 30px;
     color: white;
+    position: absolute;
 }
 
 .highlighter {
