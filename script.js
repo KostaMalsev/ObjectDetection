@@ -31,81 +31,22 @@ if (getUserMediaSupported()) {
 
 
 var children = [];
-//Perform prediction based on webcam using coco model:
-function predictWebcam() {
-    // Now let's start classifying a frame in the stream.
-    model.detect(video).then(function (predictions) {
-        // Remove any highlighting we did previous frame.
-        for (let i = 0; i < children.length; i++) {
-            liveView.removeChild(children[i]);
-        }
-        children.splice(0);
 
-        // Now lets loop through predictions and draw them to the live view if
-        // they have a high confidence score.
-        for (let n = 0; n < predictions.length; n++) {
-            // If we are over 66% sure we are sure we classified it right, draw it!
-            if (predictions[n].score > 0.66) {
-                const p = document.createElement('p');
-                p.innerText = Math.round(parseFloat(predictions[n].score) * 100) + '% ' + predictions[n].class;
-                p.style = 'margin-left: ' + predictions[n].bbox[0] + 'px; ' +
-                    'margin-top: ' + (predictions[n].bbox[1] - 10) + 'px; ' +
-                    'width: ' + (predictions[n].bbox[2] - 10) + 'px; ' +
-                    'top: 0; ' +
-                    'left: 0;';
-                //p.style = 'position: absolute'; //KOSTA
-                const highlighter = document.createElement('div');
-                highlighter.setAttribute('class', 'highlighter');
-                highlighter.style = 'left: ' + predictions[n].bbox[0] + 'px; ' +
-                    'top: ' + predictions[n].bbox[1] + 'px; ' +
-                    'width: ' + predictions[n].bbox[2] + 'px; ' +
-                    'height: ' + predictions[n].bbox[3] + 'px;';
 
-                liveView.appendChild(highlighter); //KOSTA
-                //liveView.appendChild(p);
-                highlighter.appendChild(p);
-                children.push(highlighter);//KOSTA
-                //children.push(p);
-            }
-        }
-
-        // Call this function again to keep predicting when the browser is ready.
-        window.requestAnimationFrame(predictWebcam);
-    });
-}
-
-//Perform prediction based on webcam using coco model:
+//Perform prediction based on webcam using Layer model model:
 function predictWebcamTF() {
     // Now let's start classifying a frame in the stream.
     detectTFMOBILE(video).then(function () {
-
         // Call this function again to keep predicting when the browser is ready.
         window.requestAnimationFrame(predictWebcamTF);
     });
 }
 
 
-
-
-
-
-
 // Store the resulting model in the global scope of our app.
 var model = undefined;
+tensorLoadModel();
 
-//Loading coco ssd pretrained model:
-if(type_of_model=='YOLO') {
-    //Load tensor model:
-    tensorLoadModel();
-}else{
-    cocoSsd.load().then(function (loadedModel) {
-        model = loadedModel;
-        //Enable buttons:
-        enableWebcamButton.classList.remove('invisible');
-        enableWebcamButton.innerHTML = 'Start camera';
-    });
-
-}
 
 
 
@@ -115,7 +56,6 @@ function enableCam(event) {
     if (!model) {
         return;
     }
-
     // Hide the button once clicked.
     enableWebcamButton.classList.add('removed');
 
@@ -135,11 +75,9 @@ function enableCam(event) {
         $video.onloadedmetadata = () => {
             vidWidth = $video.videoHeight;
             vidHeight = $video.videoWidth;
-
             //The start position of the video (from top left corner of the viewport)
             xStart = Math.floor((vw - vidWidth) / 2);
             yStart = (Math.floor((vh - vidHeight) / 2)>=0) ? (Math.floor((vh - vidHeight) / 2)):0;
-
             $video.play();
             if(type_of_model=='YOLO')
             {
@@ -149,7 +87,6 @@ function enableCam(event) {
             }
         }
     });
-
 }
 
 
