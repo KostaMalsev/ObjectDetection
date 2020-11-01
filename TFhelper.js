@@ -83,12 +83,7 @@ function renderPredictionBoxes (predictionBoxes, predictionClasses, predictionSc
 
         //If confidence is above 75%
         if (score > 70 && score < 100){//75) {
-            /*const p = document.createElement('p');
-            p.innerText = Math.round(score) + '% ' + 'MNM';
-            p.style = 'left: ' + minX + 'px; ' +
-                'top: ' + minY + 'px; ';
-             //   'width: ' + '15' + 'px; ';
-            p.style = 'position: absolute'; //KOSTA*/
+
             const highlighter = document.createElement('div');
             highlighter.setAttribute('class', 'highlighter');
             highlighter.style = 'left: ' + minX + 'px; ' +
