@@ -76,6 +76,7 @@ TEST_IMAGE_PATHS	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^TEST_IMAGE
 [__inference_layer_19_1_Conv2d_4_1x1_128_conv_layer_call_and_return_conditional_losses_381842	.\model\mobile_netv2\TrainEnv\KerasSaved_model\saved_model.pb	/^[__inference_layer_19_1_Conv2d_4_1x1_128_conv_layer_call_and_return_conditional_losses_381842:$/;"	l
 base_pipeline_file	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^base_pipeline_file = MODELS_CONFIG[chosen_model]['base_pipeline_file']$/;"	v
 batch_size	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^batch_size = MODELS_CONFIG[chosen_model]['batch_size'] #if you can fit a large batch in memory, it may speed up your training$/;"	v
+browser	.\.atom-live-server.json	/^  "browser": "chrome"$/;"	f
 categories	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^categories = label_map_util.convert_label_map_to_categories($/;"	v
 category_index	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^category_index = label_map_util.create_category_index(categories)$/;"	v
 children	.\script.js	/^var children = [];$/;"	v
@@ -93,6 +94,7 @@ download_config	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^download_co
 download_tar	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^download_tar = 'http:\/\/download.tensorflow.org\/models\/object_detection\/tf2\/20200711\/' + pretrained_checkpoint$/;"	v
 enableCam	.\script.js	/^function enableCam(event) {$/;"	f
 fine_tune_checkpoint	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^fine_tune_checkpoint = '\/content\/models\/research\/deploy\/' + model_name + '\/checkpoint\/ckpt-0'$/;"	v
+getUserMediaSupported	.\script.js	/^function getUserMediaSupported() {$/;"	f
 get_model_detection_function	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^def get_model_detection_function(model):$/;"	f
 get_num_classes	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^def get_num_classes(pbtxt_fname):$/;"	f
 glob	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^import glob #KOSTA$/;"	i

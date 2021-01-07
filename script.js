@@ -10,6 +10,22 @@ var vidHeight = 0;
 var xStart = 0;
 var yStart = 0;
 
+
+
+
+// Check if webcam access is supported.
+function getUserMediaSupported() {
+    return !!(navigator.mediaDevices &&
+        navigator.mediaDevices.getUserMedia);
+}
+
+// If webcam supported, add event listener to activation button:
+if (getUserMediaSupported()) {
+    enableWebcamButton.addEventListener('click', enableCam);
+} else {
+    console.warn('getUserMedia() is not supported by your browser');
+}
+
 // Enable the live webcam view and start classification.
 function enableCam(event) {
   // Only continue if the COCO-SSD has finished loading.
@@ -39,12 +55,8 @@ function enableCam(event) {
       xStart = Math.floor((vw - vidWidth) / 2);
       yStart = (Math.floor((vh - vidHeight) / 2)>=0) ? (Math.floor((vh - vidHeight) / 2)):0;
       $video.play();
-      if(type_of_model=='YOLO')
-      {
-        $video.addEventListener('loadeddata', predictWebcamTF);
-      }else{
-        $video.addEventListener('loadeddata', predictWebcam);
-      }
+      //Attach detection model to loaded data event:
+      $video.addEventListener('loadeddata', predictWebcamTF);
     }
   });
 }
@@ -52,7 +64,7 @@ function enableCam(event) {
 
 
 var model = undefined;
-model_url = 'let model_name_url = "https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model/mobile_netv2/web_model2/model.json"';
+model_url = 'https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model/mobile_netv2/web_model2/model.json';
 //Call load function
 asyncLoadModel(model_url);
 
@@ -60,6 +72,9 @@ asyncLoadModel(model_url);
 async function asyncLoadModel(model_url) {
     model = await tf.loadGraphModel(model_url);
     console.log('Model loaded');
+    //Enable start button:
+    enableWebcamButton.classList.remove('invisible');
+    enableWebcamButton.innerHTML = 'Start camera';
 }
 
 
