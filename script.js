@@ -28,7 +28,7 @@ if (getUserMediaSupported()) {
 
 // Enable the live webcam view and start classification.
 function enableCam(event) {
-  // Only continue if the COCO-SSD has finished loading.
+  // Only continue if model has finished loading.
   if (!model) {
     return;
   }
