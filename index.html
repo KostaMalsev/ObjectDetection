@@ -3,46 +3,19 @@
 <head>
     <title>The Recognizer</title>
     <meta charset="utf-8">
-    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Import the webpage's stylesheet -->
-    <!-- <link rel="stylesheet" href="style.css"> -->
     <link href="styles.css" rel="stylesheet">
 </head>
-
-
 <body>
-
-<h1>Recognizer</h1>
-
+<h1>Object Detection</h1>
 <section id="demos">
-    <!--<div id="liveView" class="camView"> -->
     <div id="liveView" >
     <button id="webcamButton" class="invisible">Loading...</button>
-        <!-- <video id="webcam" autoplay width="640" height="480"></video> -->
         <video id="webcam" class="background" playsinline crossorigin="anonymous"></video>
     </div>
 </section>
-
-
-
 <!-- Import TensorFlow.js library -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js" type="text/javascript"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
-<!-- Load the coco-ssd model to object detection:-->
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
-
-<!-- load ml5.js library for loading pre trained models-->
-<script src="https://unpkg.com/ml5@0.1.1/dist/ml5.min.js"></script>
-
-<!-- Tags of the YOLO model: -->
-<script src="ClassesOFObject.js"></script>
-
-<!-- Tensor flow helper (if difference than coco model is used  - for ex. YOLO:-->
-<script src="TFhelper.js"></script>
 <script src="script.js"></script>
-
-
-
 </body>
 </html>

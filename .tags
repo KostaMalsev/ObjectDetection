@@ -85,11 +85,13 @@ classProbThreshold	.\script.js	/^var classProbThreshold = 0.4;\/\/40%$/;"	v
 colab_utils	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^from object_detection.utils import colab_utils$/;"	i
 config_util	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^from object_detection.utils import config_util$/;"	i
 configs	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^configs = config_util.get_configs_from_pipeline_file(pipeline_config)$/;"	v
+const.video	.\script.js	/^    video: true$/;"	p
 detect_fn	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^  def detect_fn(image):$/;"	f	function:get_model_detection_function
 detect_fn	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^detect_fn = get_model_detection_function(detection_model)$/;"	v
 detection_model	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^detection_model = model_builder.build($/;"	v
 download_config	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^download_config = 'https:\/\/raw.githubusercontent.com\/KostaMalsev\/ImageRecognition\/master\/model\/mobile_netv2\/ssd_mobilenet_v2_320x320_coco17_tpu-8.config'$/;"	v
 download_tar	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^download_tar = 'http:\/\/download.tensorflow.org\/models\/object_detection\/tf2\/20200711\/' + pretrained_checkpoint$/;"	v
+enableCam	.\script.js	/^function enableCam(event) {$/;"	f
 fine_tune_checkpoint	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^fine_tune_checkpoint = '\/content\/models\/research\/deploy\/' + model_name + '\/checkpoint\/ckpt-0'$/;"	v
 get_model_detection_function	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^def get_model_detection_function(model):$/;"	f
 get_num_classes	.\model\mobile_netv2\TrainEnv\RoboflowTrainFile.py	/^def get_num_classes(pbtxt_fname):$/;"	f

@@ -10,30 +10,49 @@ var vidHeight = 0;
 var xStart = 0;
 var yStart = 0;
 
-// Stream video (compatible also with safari)
-navigator.mediaDevices.getUserMedia({
-        video: {
-            facingMode: "environment"
-        },
-    }).then(stream => {
-        let $video = document.querySelector('video');
-        $video.srcObject = stream;
-        $video.onloadedmetadata = () => {
-            vidWidth = $video.videoHeight;
-            vidHeight = $video.videoWidth;
-            //The start position of the video (from top left corner of the viewport)
-            xStart = Math.floor((vw - vidWidth) / 2);
-            yStart = (Math.floor((vh - vidHeight) / 2)>=0) ? (Math.floor((vh - vidHeight) / 2)):0;
-            $video.play();
-            $video.addEventListener('loadeddata', predictWebcamTF);
-        }
-    });
+// Enable the live webcam view and start classification.
+function enableCam(event) {
+  // Only continue if the COCO-SSD has finished loading.
+  if (!model) {
+    return;
+  }
+  // Hide the button once clicked.
+  enableWebcamButton.classList.add('removed');
+
+  // getUsermedia parameters to force video but not audio.
+  const constraints = {
+    video: true
+  };
+
+  // Stream video from VAR (for safari also)
+  navigator.mediaDevices.getUserMedia({
+    video: {
+      facingMode: "environment"
+    },
+  }).then(stream => {
+    let $video = document.querySelector('video');
+    $video.srcObject = stream;
+    $video.onloadedmetadata = () => {
+      vidWidth = $video.videoHeight;
+      vidHeight = $video.videoWidth;
+      //The start position of the video (from top left corner of the viewport)
+      xStart = Math.floor((vw - vidWidth) / 2);
+      yStart = (Math.floor((vh - vidHeight) / 2)>=0) ? (Math.floor((vh - vidHeight) / 2)):0;
+      $video.play();
+      if(type_of_model=='YOLO')
+      {
+        $video.addEventListener('loadeddata', predictWebcamTF);
+      }else{
+        $video.addEventListener('loadeddata', predictWebcam);
+      }
+    }
+  });
 }
 
 
 
 var model = undefined;
-model_url = my_model_url;
+model_url = 'let model_name_url = "https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model/mobile_netv2/web_model2/model.json"';
 //Call load function
 asyncLoadModel(model_url);
 
