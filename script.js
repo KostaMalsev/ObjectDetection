@@ -108,29 +108,16 @@ async function detectTFMOBILE(imgToPredict) {
     const tf4d = tf.cast(tf4d_, 'int32');
 
     //Perform the detection with your layer model:
-    //resized
-    //let predictions = await model.executeAsync(tf4d);
-    //KOSTA_OCR:
+    let predictions = await model.executeAsync(tf4d);
     
-    const lang = 'eng';//document.querySelector('#langsel').value
-    //resized
-    const data = await Tesseract.recognize(
-        'https://tesseract.projectnaptha.com/img/eng_bw.png',
-        'eng', { logger: m => console.log(m) }).then(({ data: { text } }) => {
-        console.log(text);
-    });
- 
-    
-
-    /*
     //Draw box around the detected object:
     renderPredictionBoxes(predictions[4].dataSync(), predictions[1].dataSync(), predictions[2].dataSync());
-//Dispose of the tensors (so it won't consume memory)
+    //Dispose of the tensors (so it won't consume memory)
     tfImg.dispose();
     smallImg.dispose();
     resized.dispose();
     tf4d.dispose();
-    */
+    
 }
 
 
