@@ -57,7 +57,7 @@ button {
     padding: 5px;
     z-index: 2;
     font-size: 30px;
-    color: white;
+    color: red;
     position: absolute;
 }
 
