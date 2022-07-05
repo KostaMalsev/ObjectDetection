@@ -151,7 +151,7 @@ const width_ = (maxX-minX).toFixed(0);
         // Add boxes to the objects that were detected 
 
 //If confidence is above 70%
-        if (score > 90 && score < 100){
+        if (score > 70 && score < 100){
             const highlighter = document.createElement('div');
             highlighter.setAttribute('class', 'highlighter');
             highlighter.style = 'left: ' + minX + 'px; ' +
