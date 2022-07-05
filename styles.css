@@ -62,8 +62,7 @@ button {
 }
 
 .highlighter {
-    border: 2px solid white;
-    box-shadow: 0 0 50px 0 white;
+    border: 2px solid red;
     z-index: 1;
     position: fixed;
     display: grid;
