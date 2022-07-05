@@ -1,16 +1,24 @@
 body {
     font-family: sans-serif;
     margin: 0;
-    background: black;
+    background: white;
 }
 
 h1 {
-    opacity: 0;
+    opacity: 100;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    position: fixed;
 }
 
 video {
-    width: 100vw;
-    height: 100vh;
+    width: 120vw;
+    height: 120vh;
+    position: absolute;
+    top: 40px;
+    right: -20px;
+    position: fixed;
 }
 
 button {
@@ -23,8 +31,8 @@ button {
     pointer-events: all;
     transition: .2s ease;
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 150px;
+    left: 30px;
     position: fixed;
 }
 
@@ -34,7 +42,7 @@ button {
 }
 
 .invisible {
-    border: 1px solid #B1B1B3;
+    border: 1px solid #ff0000;
     background: white;
     color: #000;
     cursor: default;
@@ -66,7 +74,21 @@ button {
     width: 100%;
     position: fixed;
     z-index: -1000;
-    left: 0;
-    top: 0;
-    background: black;
+    left: 320px;
+    top: 20px;
+    background: white;
+}
+.buttons {
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 10px 30px;
+    background-color: #0060DF;
+    border: solid 1px #0060DF;
+    color: #FFF;
+    pointer-events: all;
+    transition: .2s ease;
+    position: absolute;
+    top: 150px;
+    left: 30px;
+    position: fixed;
 }

@@ -3,6 +3,9 @@ const video = document.getElementById('webcam');
 const liveView = document.getElementById('liveView');
 const demosSection = document.getElementById('demos');
 const enableWebcamButton = document.getElementById('webcamButton');
+
+// Add segments for the different classes
+
 const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
 const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
 var vidWidth = 0;
@@ -64,7 +67,10 @@ function enableCam(event) {
 
 
 var model = undefined;
-model_url = 'https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model/mobile_netv2/web_model2/model.json';
+// model_url = 'https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model/mobile_netv2/web_model2/model.json';
+// change to our own pretrained model
+model_url = model_zoo.get_model('yolo3_darknet53_voc', pretrained=True)
+
 //Call load function
 asyncLoadModel(model_url);
 
@@ -138,19 +144,34 @@ function renderPredictionBoxes (predictionBoxes, predictionClasses, predictionSc
         const maxY = (predictionBoxes[i * 4 + 2] * vidHeight+yStart).toFixed(0);
         const maxX = (predictionBoxes[i * 4 + 3] * vidWidth+xStart).toFixed(0);
         const score = predictionScores[i * 3] * 100;
+        const fruit = predictionClasses[i];
 const width_ = (maxX-minX).toFixed(0);
         const height_ = (maxY-minY).toFixed(0);
+
+
+        // Add boxes to the objects that were detected 
+
 //If confidence is above 70%
-        if (score > 70 && score < 100){
+        if (score > 90 && score < 100){
             const highlighter = document.createElement('div');
             highlighter.setAttribute('class', 'highlighter');
             highlighter.style = 'left: ' + minX + 'px; ' +
                 'top: ' + minY + 'px; ' +
                 'width: ' + width_ + 'px; ' +
                 'height: ' + height_ + 'px;';
-            highlighter.innerHTML = '<p>'+Math.round(score) + '% ' + 'Your Object Name'+'</p>';
+            highlighter.innerHTML = '<p>'+Math.round(score) + '% ' + fruit +'</p>';
+
+
+            const buttons = document.createElement('div');
+            buttons.setAttribute('class', 'buttons');
+            buttons.innerHTML = '<p>'+ fruit +'</p>';
+
             liveView.appendChild(highlighter);
+            liveView.appendChild(buttons);
             children.push(highlighter);
+            children.push(buttons);
         }
     }
 }
+
+  // Add boxes to the objects that were detected 
