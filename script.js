@@ -67,7 +67,7 @@ function enableCam(event) {
 
 
 var model = undefined;
-model_url = 'https://raw.githubusercontent.com/Phipsn/objectdetection/main/best_web_model/model.json';
+model_url = 'https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model/mobile_netv2/web_model2/model.json';
 // change to our own pretrained model
 
 //Call load function
@@ -109,11 +109,12 @@ async function detectTFMOBILE(imgToPredict) {
 
 
     const resized = tf.cast(smallImg, 'int32');
-    var tf4d_ = tf.tensor4d(Array.from(resized.dataSync()), [1,vidHeight, vidWidth, 3]);
+    var tf4d_ = tf.tensor4d(Array.from(resized.dataSync()), [1,vidHeight,vidWidth, 3]);
     const tf4d = tf.cast(tf4d_, 'int32');
 
     //Perform the detection with your layer model:
     let predictions = await model.executeAsync(tf4d);
+    console.log(predictions)
     
     //Draw box around the detected object:
     renderPredictionBoxes(predictions[4].dataSync(), predictions[1].dataSync(), predictions[2].dataSync());
