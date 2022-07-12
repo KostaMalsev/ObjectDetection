@@ -67,7 +67,7 @@ function enableCam(event) {
 
 
 var model = undefined;
-model_url = 'https://raw.githubusercontent.com/KostaMalsev/ImageRecognition/master/model/mobile_netv2/web_model2/model.json';
+model_url = 'https://raw.githubusercontent.com/Phipsn/objectdetection/main/best_web_model/model.json';
 // change to our own pretrained model
 
 //Call load function
